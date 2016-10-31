@@ -1,5 +1,7 @@
 import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil;
 
+import java.util.ArrayList;
+
 /**
  * Created by derek on 10/25/16.
  */
@@ -25,6 +27,9 @@ public class Node<T extends Comparable<T>> {
     public T getValue(){
         return value;
     }
+
+    public Node<T> getLesserNode(){return left;}
+    public Node<T> getGreaterNode(){return right;}
 
     //Constructors
     public Node(T value){
@@ -53,7 +58,17 @@ public class Node<T extends Comparable<T>> {
         }
     }
 
-    public boolean contains(){
+    public boolean contains(T value)
+    {
+        if(this.value.equals(value)){
+            return true;
+        }
+
+        if(!isLeftEmpty() && this.left.contains(value))
+            return true;
+        else if(!isRightEmpty() && this.right.contains(value))
+            return true;
+
         return false;
     }
 
@@ -69,5 +84,20 @@ public class Node<T extends Comparable<T>> {
             System.out.print("Right of " + this.value.toString());
             right.display(level + 1);
         }
+    }
+
+    public ArrayList<T> sort(){
+        //Create a new list
+        ArrayList<T> valueList = new ArrayList<T>();
+
+        if(!isLeftEmpty())
+            valueList.addAll(left.sort());
+
+        valueList.add(this.value);
+
+        if(!isRightEmpty())
+            valueList.addAll(right.sort());
+
+        return valueList;
     }
 }
